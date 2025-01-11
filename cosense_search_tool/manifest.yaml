@@ -1,0 +1,50 @@
+version: "0.1.0"
+author: "teramotodaiki"
+name: "cosense-search-tool"
+description:
+  en: "Cosense read-only search integration"
+  ja: "Cosense の読み取り専用検索インテグレーション"
+icon: "./cosense-logo.png"
+label:
+  en: "Cosense Search"
+  ja: "Cosense 検索"
+category: "Tool"
+created_at: "2024-01-11T00:00:00Z"
+resource:
+  memory: 256
+  permission:
+    tool:
+      enabled: true
+plugins:
+  tools:
+    - "cosense_search"
+tags:
+  - "search"
+  - "knowledge-base"
+  - "cosense"
+verified: false
+tool_provider:
+  type: "CUSTOM"
+  name: "cosense_search"
+  description:
+    en: "Search Cosense pages across projects"
+    ja: "Cosense のページを検索"
+  parameters:
+    - name: "project_name"
+      type: "string"
+      required: true
+      label:
+        en: "Project Name"
+        ja: "プロジェクト名"
+      description:
+        en: "Name of the Cosense project to search in"
+        ja: "検索対象のCosenseプロジェクト名"
+    - name: "query"
+      type: "string"
+      required: true
+      label:
+        en: "Search Query"
+        ja: "検索クエリ"
+      description:
+        en: "Search terms to look for in the project"
+        ja: "プロジェクト内で検索するキーワード"
