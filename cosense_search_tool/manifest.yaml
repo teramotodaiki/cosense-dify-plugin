@@ -2,7 +2,7 @@ version: 0.1.0
 type: plugin
 author: teramotodaiki
 name: cosense-search-tool
-icon: ./_assets/cosense-logo.png
+icon: cosense-logo.png
 description:
   en_US: Cosense read-only search integration
   ja_JP: Cosense の読み取り専用検索インテグレーション
