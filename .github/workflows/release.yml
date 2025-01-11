@@ -56,6 +56,24 @@ jobs:
           dify plugin package ./cosense-dify-plugin/cosense_search_tool
           cd cosense-dify-plugin
 
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.6'
+
+      - name: Build and run sign tool
+        run: |
+          git clone https://github.com/langgenius/dify-plugin-daemon.git
+          cd dify-plugin-daemon
+          # Generate RSA key pair
+          openssl genrsa 4096 2>/dev/null | openssl rsa -traditional > internal/core/license/private_key/PRIVATE_KEY.pem
+          chmod 600 internal/core/license/private_key/PRIVATE_KEY.pem
+          # Build sign tool
+          go build -o sign-tool ./cmd/license/sign
+          # Sign plugin
+          cd ..
+          ./dify-plugin-daemon/sign-tool -in ../cosense_search_tool.difypkg -out ../cosense_search_tool_signed.difypkg
+
       - name: Generate version tag
         id: version
         run: |
@@ -69,4 +87,4 @@ jobs:
           gh release create ${{ steps.version.outputs.tag }} \
             --title "Cosense Search Tool ${{ steps.version.outputs.tag }}" \
             --notes "Automated release from main branch" \
-            ../cosense_search_tool.difypkg
+            ../cosense_search_tool_signed.difypkg
