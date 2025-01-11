@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 'devin/*'
 
 jobs:
   build-and-release:
