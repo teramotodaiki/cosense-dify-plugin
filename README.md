@@ -1,6 +1,6 @@
 # Cosense Search Plugin for Dify
 
-![Cosense Banner](./cosense_search_tool/cosense-banner.png)
+![Cosense Banner](./cosense_search_tool/_assets/cosense-banner.png)
 
 A Dify plugin that enables seamless integration with Cosense's knowledge search capabilities.
 
@@ -53,12 +53,13 @@ The plugin accepts simple search parameters:
 
 ```json
 {
-    "project_name": "your-project",
-    "query": "your search terms"
+  "project_name": "your-project",
+  "query": "your search terms"
 }
 ```
 
 Example response:
+
 ```json
 {
     "query": "API documentation",
