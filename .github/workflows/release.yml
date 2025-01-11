@@ -1,4 +1,4 @@
-name: Release Plugin Package
+name: CI/CD Pipeline
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,12 +19,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-
-      - name: Generate version tag
-        id: version
-        run: |
-          timestamp=$(date -u +%Y%m%d%H%M%S)
-          echo "tag=v0.1.0-${timestamp}" >> $GITHUB_OUTPUT
 
       - name: Install dify plugin tool
         run: |
@@ -38,11 +32,41 @@ jobs:
           dify plugin package ./cosense-dify-plugin/cosense_search_tool
           cd cosense-dify-plugin
 
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dify plugin tool
+        run: |
+          curl -L -o dify https://github.com/langgenius/dify-plugin-daemon/releases/download/0.0.1/dify-plugin-linux-amd64
+          chmod +x dify
+          sudo mv dify /usr/local/bin/
+
+      - name: Package plugin
+        run: |
+          cd ..
+          dify plugin package ./cosense-dify-plugin/cosense_search_tool
+          cd cosense-dify-plugin
+
+      - name: Generate version tag
+        id: version
+        run: |
+          timestamp=$(date -u +%Y%m%d%H%M%S)
+          echo "tag=v0.1.0-${timestamp}" >> $GITHUB_OUTPUT
+
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ steps.version.outputs.tag }} \
             --title "Cosense Search Tool ${{ steps.version.outputs.tag }}" \
-            --notes "Automated release from main branch commit ${GITHUB_SHA}" \
+            --notes "Automated release from main branch" \
             ../cosense_search_tool.difypkg
