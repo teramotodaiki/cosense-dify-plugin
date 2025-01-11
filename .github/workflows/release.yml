@@ -1,0 +1,44 @@
+name: Release Plugin Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Generate version tag
+        id: version
+        run: |
+          timestamp=$(date -u +%Y%m%d%H%M%S)
+          echo "tag=v0.1.0-${timestamp}" >> $GITHUB_OUTPUT
+
+      - name: Install dify plugin tool
+        run: |
+          curl -L -o dify-plugin-daemon.tar.gz https://github.com/langgenius/dify-plugin-daemon/releases/latest/download/dify-plugin-daemon-linux-amd64.tar.gz
+          tar xzf dify-plugin-daemon.tar.gz
+          sudo mv dify /usr/local/bin/
+
+      - name: Package plugin
+        run: |
+          cd ..
+          dify plugin package ./cosense-dify-plugin/cosense_search_tool
+          cd cosense-dify-plugin
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.version.outputs.tag }} \
+            --title "Cosense Search Tool ${{ steps.version.outputs.tag }}" \
+            --notes "Automated release from main branch commit ${GITHUB_SHA}" \
+            ../cosense_search_tool.difypkg

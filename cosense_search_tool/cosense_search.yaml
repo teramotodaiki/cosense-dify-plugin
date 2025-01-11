@@ -1,0 +1,24 @@
+type: tool
+name: cosense_search
+description:
+  en_US: Search Cosense pages across projects
+  ja_JP: Cosense のページを検索
+parameters:
+  - name: project_name
+    type: string
+    required: true
+    label:
+      en_US: Project Name
+      ja_JP: プロジェクト名
+    description:
+      en_US: Name of the Cosense project to search in
+      ja_JP: 検索対象のCosenseプロジェクト名
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Search Query
+      ja_JP: 検索クエリ
+    description:
+      en_US: Search terms to look for in the project
+      ja_JP: プロジェクト内で検索するキーワード
