@@ -30,10 +30,6 @@ meta:
     language: python
     version: 3.12
     entrypoint: main
-tags:
-  - search
-  - knowledge
-  - tools
 tool_provider:
   type: CUSTOM
   name: cosense_search
