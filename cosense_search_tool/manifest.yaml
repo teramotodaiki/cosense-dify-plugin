@@ -32,8 +32,8 @@ meta:
     entrypoint: main
 tags:
   - search
-  - knowledge-base
-  - cosense
+  - knowledge
+  - tools
 tool_provider:
   type: CUSTOM
   name: cosense_search
