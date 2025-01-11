@@ -1,51 +1,61 @@
----
 version: 0.1.0
+type: plugin
 author: teramotodaiki
 name: cosense-search-tool
-description:
-  en: Cosense read-only search integration
-  ja: Cosense の読み取り専用検索インテグレーション
 icon: ./cosense-logo.png
+description:
+  en_US: Cosense read-only search integration
+  ja_JP: Cosense の読み取り専用検索インテグレーション
 label:
-  en: Cosense Search
-  ja: Cosense 検索
-category: Tool
+  en_US: Cosense Search
+  ja_JP: Cosense 検索
 created_at: 2024-01-11T00:00:00Z
 resource:
-  memory: 256
+  memory: 1048576
   permission:
     tool:
       enabled: true
 plugins:
   tools:
-    - cosense_search
+    - cosense_search.yaml
+execution:
+  install: install.sh
+  launch: launch.sh
+meta:
+  version: 0.1.0
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: 3.12
+    entrypoint: main
 tags:
   - search
   - knowledge-base
   - cosense
-verified: false
 tool_provider:
   type: CUSTOM
   name: cosense_search
   description:
-    en: Search Cosense pages across projects
-    ja: Cosense のページを検索
+    en_US: Search Cosense pages across projects
+    ja_JP: Cosense のページを検索
   parameters:
     - name: project_name
       type: string
       required: true
       label:
-        en: Project Name
-        ja: プロジェクト名
+        en_US: Project Name
+        ja_JP: プロジェクト名
       description:
-        en: Name of the Cosense project to search in
-        ja: 検索対象のCosenseプロジェクト名
+        en_US: Name of the Cosense project to search in
+        ja_JP: 検索対象のCosenseプロジェクト名
     - name: query
       type: string
       required: true
       label:
-        en: Search Query
-        ja: 検索クエリ
+        en_US: Search Query
+        ja_JP: 検索クエリ
       description:
-        en: Search terms to look for in the project
-        ja: プロジェクト内で検索するキーワード
+        en_US: Search terms to look for in the project
+        ja_JP: プロジェクト内で検索するキーワード
