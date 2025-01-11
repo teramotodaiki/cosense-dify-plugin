@@ -8,7 +8,7 @@ from .tool_provider import CosenseSearchToolProvider
 tool_provider = CosenseSearchToolProvider()
 
 manifest = PluginDeclaration(
-    version="0.1.0",
+    version="1.0.0",
     author="teramotodaiki",
     name="cosense-search-tool",
     description=I18nObject(
