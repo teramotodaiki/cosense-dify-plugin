@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional
 
 from dify_plugin import ToolProvider
-from dify_plugin.tool import ToolInvokeMessage
+from dify_plugin.entities.tool import ToolInvokeMessage
 from dify_plugin.i18n import I18nObject
 
 from .cosense_search import cosense_search, CosenseSearchError
@@ -42,7 +42,7 @@ class CosenseSearchToolProvider(ToolProvider):
         }
     ]
 
-    def invoke(self, user_id: str, tool_parameters: Dict[str, Any], **kwargs) -> ToolInvokeMessage:
+    def invoke(self, user_id: str, tool_parameters: Dict[str, Any], **kwargs: Any) -> ToolInvokeMessage:
         """
         Invoke the Cosense search tool with the given parameters.
         

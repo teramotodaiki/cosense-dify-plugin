@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import requests
 from requests.exceptions import RequestException
@@ -56,6 +56,7 @@ def cosense_search(
             timeout=10  # 10 second timeout
         )
         response.raise_for_status()
-        return response.json()
+        result: Dict[str, Union[List[Dict[str, Any]], str]] = response.json()
+        return result
     except RequestException as e:
         raise CosenseSearchError(f"Search request failed: {str(e)}")
