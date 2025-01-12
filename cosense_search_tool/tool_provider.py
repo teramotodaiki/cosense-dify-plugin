@@ -1,11 +1,13 @@
 from typing import Any, Dict, List, Optional
 
-from core.tools.entities.tool_entities import ToolProviderEntity, ToolProviderType, ToolInvokeMessage
-from core.tools.entities.common_entities import I18nObject
+from dify_plugin import ToolProvider
+from dify_plugin.types import ToolProviderType
+from dify_plugin.entities.tool import ToolInvokeMessage
+from dify_plugin.entities.common import I18nObject
 
 from .cosense_search import cosense_search, CosenseSearchError
 
-class CosenseSearchToolProvider(ToolProviderEntity):
+class CosenseSearchToolProvider(ToolProvider):
     type: ToolProviderType = ToolProviderType.CUSTOM
     name: str = "cosense_search"
     description: I18nObject = I18nObject(
