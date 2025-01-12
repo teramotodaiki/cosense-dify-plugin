@@ -3,12 +3,31 @@ from typing import Any, Dict, List, Optional
 from dify_plugin import ToolProvider
 from dify_plugin.entities.tool import ToolInvokeMessage
 from dify_plugin.entities import I18nObject
+from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 
 from .cosense_search import cosense_search, CosenseSearchError
 
 class CosenseSearchToolProvider(ToolProvider):
     type = "CUSTOM"
     name: str = "cosense_search"
+
+    def _validate_credentials(self, credentials: Dict[str, Any]) -> None:
+        """Validate the credentials for the Cosense search tool.
+        
+        Args:
+            credentials: Dictionary containing credentials
+            
+        Raises:
+            ToolProviderCredentialValidationError: If credentials validation fails
+        """
+        try:
+            # Test search with public project
+            cosense_search(
+                project_name="help-jp",
+                query="test"
+            )
+        except Exception as e:
+            raise ToolProviderCredentialValidationError(str(e))
     description: I18nObject = I18nObject(
         en_US="Search Cosense pages across projects",
         ja_JP="Cosense のページを検索"
