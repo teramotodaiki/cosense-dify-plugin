@@ -1,5 +1,5 @@
 from dify_plugin import Plugin, DifyPluginEnv
-from tool_provider import CosenseSearchToolProvider
+from cosense_search_tool.tool_provider import CosenseSearchToolProvider
 
 plugin = Plugin(DifyPluginEnv(MAX_REQUEST_TIMEOUT=30))
 

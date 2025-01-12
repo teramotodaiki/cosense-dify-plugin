@@ -1,4 +1,4 @@
-version: 1.0.0
+version: "1.0.0"
 type: plugin
 author: teramotodaiki
 name: cosense-search-tool
@@ -22,13 +22,13 @@ execution:
   install: install.sh
   launch: launch.sh
 meta:
-  version: 1.0.0
+  version: "1.0.0"
   arch:
     - amd64
     - arm64
   runner:
     language: python
-    version: 3.12
+    version: "3.12"
     entrypoint: main
 tool_provider:
   type: CUSTOM

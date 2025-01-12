@@ -116,4 +116,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Project specific
+dify
+**/dify
+!**/dify_plugin/
+!**/dify_plugin/**
+
 
