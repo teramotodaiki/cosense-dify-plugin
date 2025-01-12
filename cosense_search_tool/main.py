@@ -1,9 +1,7 @@
-from cosense_search import cosense_search
+from dify_plugin import Plugin, DifyPluginEnv
 from tool_provider import CosenseSearchToolProvider
 
-def main():
-    # Initialize the tool provider
-    provider = CosenseSearchToolProvider()
-    
+plugin = Plugin(DifyPluginEnv(MAX_REQUEST_TIMEOUT=30))
+
 if __name__ == "__main__":
-    main()
+    plugin.run()

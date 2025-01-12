@@ -1,0 +1,58 @@
+name: Pre Check Plugin
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, review_requested, edited]
+    branches: 
+      - main
+      - 'devin/*'
+    paths-ignore:
+      - ".gitignore"
+      - "README.md"
+      - "LICENSE"
+
+env:
+  PLUGIN_PATH: cosense_search_tool
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  pre-check-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Plugin Daemon
+        run: |
+          gh release download -R langgenius/dify-plugin-daemon --pattern "dify-plugin-linux-amd64" --dir .
+          chmod +x ./dify-plugin-linux-amd64
+          mv ./dify-plugin-linux-amd64 ./dify
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12.7
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
+            echo "Installing plugin dependencies..."
+            python -m venv .venv
+            source .venv/bin/activate
+            pip install -r ${{ env.PLUGIN_PATH }}/requirements.txt
+          fi
+
+      - name: Check Plugin Install
+        run: |
+          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
+            source .venv/bin/activate
+          fi
+          ./dify plugin package ${{ env.PLUGIN_PATH }}
+
+      - name: Test Plugin Package
+        run: |
+          if [ ! -f cosense_search_tool.difypkg ]; then
+            echo "Plugin package not created successfully"
+            exit 1
+          fi
