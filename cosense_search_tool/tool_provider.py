@@ -1,14 +1,13 @@
 from typing import Any, Dict, List, Optional
 
 from dify_plugin import ToolProvider
-from dify_plugin.types import ToolProviderType
 from dify_plugin.entities.tool import ToolInvokeMessage
 from dify_plugin.entities.common import I18nObject
 
 from .cosense_search import cosense_search, CosenseSearchError
 
 class CosenseSearchToolProvider(ToolProvider):
-    type: ToolProviderType = ToolProviderType.CUSTOM
+    type = "CUSTOM"
     name: str = "cosense_search"
     description: I18nObject = I18nObject(
         en="Search Cosense pages across projects",
