@@ -1,7 +1,7 @@
 import datetime
 
-from core.plugin.entities.plugin import PluginDeclaration, PluginResourceRequirements, PluginCategory
-from core.tools.entities.common_entities import I18nObject
+from dify_plugin.entities.plugin import PluginDeclaration, PluginResourceRequirements, PluginCategory
+from dify_plugin.entities.common import I18nObject
 from .tool_provider import CosenseSearchToolProvider
 
 # Initialize the tool provider
