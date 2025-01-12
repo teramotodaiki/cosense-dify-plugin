@@ -43,6 +43,13 @@ jobs:
             pip install -r ${{ env.PLUGIN_PATH }}/requirements.txt
           fi
 
+      - name: Run Static Analysis
+        run: |
+          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
+            source .venv/bin/activate
+            python -m mypy ${{ env.PLUGIN_PATH }}/test_imports.py ${{ env.PLUGIN_PATH }}/tool_provider.py ${{ env.PLUGIN_PATH }}/cosense_search.py --config-file mypy.ini || echo "::warning::Mypy found import issues - please review the logs"
+          fi
+
       - name: Check Plugin Install
         run: |
           if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
