@@ -1,8 +1,8 @@
 from typing import Any, Dict, List, Optional
 
 from dify_plugin import ToolProvider
-from dify_plugin.tool import ToolInvokeMessage
-from dify_plugin.i18n import I18nObject
+from dify_plugin.entities.tool import ToolInvokeMessage
+from dify_plugin.entities import I18nObject
 
 from .cosense_search import cosense_search, CosenseSearchError
 
@@ -10,8 +10,8 @@ class CosenseSearchToolProvider(ToolProvider):
     type = "CUSTOM"
     name: str = "cosense_search"
     description: I18nObject = I18nObject(
-        en="Search Cosense pages across projects",
-        ja="Cosense のページを検索"
+        en_US="Search Cosense pages across projects",
+        ja_JP="Cosense のページを検索"
     )
     parameters: List[Dict[str, Any]] = [
         {
@@ -19,12 +19,12 @@ class CosenseSearchToolProvider(ToolProvider):
             "type": "string",
             "required": True,
             "label": I18nObject(
-                en="Project Name",
-                ja="プロジェクト名"
+                en_US="Project Name",
+                ja_JP="プロジェクト名"
             ),
             "description": I18nObject(
-                en="Name of the Cosense project to search in",
-                ja="検索対象のCosenseプロジェクト名"
+                en_US="Name of the Cosense project to search in",
+                ja_JP="検索対象のCosenseプロジェクト名"
             )
         },
         {
@@ -32,17 +32,17 @@ class CosenseSearchToolProvider(ToolProvider):
             "type": "string",
             "required": True,
             "label": I18nObject(
-                en="Search Query",
-                ja="検索クエリ"
+                en_US="Search Query",
+                ja_JP="検索クエリ"
             ),
             "description": I18nObject(
-                en="Search terms to look for in the project",
-                ja="プロジェクト内で検索するキーワード"
+                en_US="Search terms to look for in the project",
+                ja_JP="プロジェクト内で検索するキーワード"
             )
         }
     ]
 
-    def invoke(self, user_id: str, tool_parameters: Dict[str, Any], **kwargs) -> ToolInvokeMessage:
+    def invoke(self, user_id: str, tool_parameters: Dict[str, Any], **kwargs: Any) -> ToolInvokeMessage:
         """
         Invoke the Cosense search tool with the given parameters.
         

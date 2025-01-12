@@ -6,6 +6,9 @@ on:
     branches: 
       - main
       - 'devin/*'
+  push:
+    branches:
+      - 'devin/*'
     paths-ignore:
       - ".gitignore"
       - "README.md"
@@ -41,6 +44,23 @@ jobs:
             python -m venv .venv
             source .venv/bin/activate
             pip install -r ${{ env.PLUGIN_PATH }}/requirements.txt
+          fi
+
+      - name: Verify Runtime Imports
+        run: |
+          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
+            source .venv/bin/activate
+            python ${{ env.PLUGIN_PATH }}/test_imports.py || {
+              echo "::error::Runtime import verification failed - please check import paths"
+              exit 1
+            }
+          fi
+
+      - name: Dump dify_plugin modules
+        run: |
+          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
+            source .venv/bin/activate
+            python ${{ env.PLUGIN_PATH }}/inspect_package.py || echo "::warning::Failed to inspect dify_plugin modules"
           fi
 
       - name: Run Static Analysis

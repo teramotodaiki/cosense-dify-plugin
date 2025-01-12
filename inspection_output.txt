@@ -1,0 +1,2385 @@
+=== dify_plugin Package Structure ===
+
+Package Help:
+Help on package dify_plugin:
+
+NAME
+    dify_plugin
+
+PACKAGE CONTENTS
+    config (package)
+    core (package)
+    entities (package)
+    errors (package)
+    file (package)
+    interfaces (package)
+    invocations (package)
+    plugin
+    tool (package)
+
+CLASSES
+    abc.ABC(builtins.object)
+        dify_plugin.interfaces.endpoint.Endpoint
+        dify_plugin.interfaces.model.ModelProvider
+            dify_plugin.interfaces.model.openai_compatible.provider.OAICompatProvider
+        dify_plugin.interfaces.tool.ToolProvider
+            dify_plugin.interfaces.agent.AgentProvider
+    dify_plugin.core.runtime.BackwardsInvocation(typing.Generic, abc.ABC)
+        dify_plugin.invocations.file.File
+    dify_plugin.core.server.io_server.IOServer(abc.ABC)
+        dify_plugin.plugin.Plugin(dify_plugin.core.server.io_server.IOServer, dify_plugin.core.server.router.Router)
+    dify_plugin.core.server.router.Router(builtins.object)
+        dify_plugin.plugin.Plugin(dify_plugin.core.server.io_server.IOServer, dify_plugin.core.server.router.Router)
+    dify_plugin.interfaces.model.ai_model.AIModel(abc.ABC)
+        dify_plugin.interfaces.model.large_language_model.LargeLanguageModel
+            dify_plugin.interfaces.model.openai_compatible.llm.OAICompatLargeLanguageModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.large_language_model.LargeLanguageModel)
+        dify_plugin.interfaces.model.moderation_model.ModerationModel
+        dify_plugin.interfaces.model.rerank_model.RerankModel
+            dify_plugin.interfaces.model.openai_compatible.rerank.OAICompatRerankModel
+        dify_plugin.interfaces.model.speech2text_model.Speech2TextModel
+            dify_plugin.interfaces.model.openai_compatible.speech2text.OAICompatSpeech2TextModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.speech2text_model.Speech2TextModel)
+        dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel
+            dify_plugin.interfaces.model.openai_compatible.text_embedding.OAICompatEmbeddingModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel)
+        dify_plugin.interfaces.model.tts_model.TTSModel
+            dify_plugin.interfaces.model.openai_compatible.tts.OAICompatText2SpeechModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.tts_model.TTSModel)
+    dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat(builtins.object)
+        dify_plugin.interfaces.model.openai_compatible.llm.OAICompatLargeLanguageModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.large_language_model.LargeLanguageModel)
+        dify_plugin.interfaces.model.openai_compatible.speech2text.OAICompatSpeech2TextModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.speech2text_model.Speech2TextModel)
+        dify_plugin.interfaces.model.openai_compatible.text_embedding.OAICompatEmbeddingModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel)
+        dify_plugin.interfaces.model.openai_compatible.tts.OAICompatText2SpeechModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.tts_model.TTSModel)
+    dify_plugin.interfaces.tool.ToolLike(abc.ABC, typing.Generic)
+        dify_plugin.interfaces.agent.AgentStrategy
+        dify_plugin.interfaces.tool.Tool
+    pydantic_settings.main.BaseSettings(pydantic.main.BaseModel)
+        dify_plugin.config.config.DifyPluginEnv
+
+    class AgentProvider(dify_plugin.interfaces.tool.ToolProvider)
+     |  Method resolution order:
+     |      AgentProvider
+     |      dify_plugin.interfaces.tool.ToolProvider
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  validate_credentials(self, credentials: dict)
+     |      Always permit the agent to run
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.tool.ToolProvider:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+
+    class AgentStrategy(dify_plugin.interfaces.tool.ToolLike)
+     |  AgentStrategy(session: dify_plugin.core.runtime.Session)
+     |
+     |  Method resolution order:
+     |      AgentStrategy
+     |      dify_plugin.interfaces.tool.ToolLike
+     |      abc.ABC
+     |      typing.Generic
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, session: dify_plugin.core.runtime.Session)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  increase_usage(self, final_llm_usage_dict: dict[str, typing.Optional[dify_plugin.entities.model.llm.LLMUsage]], usage: dify_plugin.entities.model.llm.LLMUsage)
+     |
+     |  invoke(self, parameters: dict) -> collections.abc.Generator[dify_plugin.entities.agent.AgentInvokeMessage, None, None]
+     |
+     |  recalc_llm_max_tokens(self, model_entity: dify_plugin.entities.model.AIModelEntity, prompt_messages: list[dify_plugin.entities.model.message.PromptMessage], parameters: dict)
+     |
+     |  update_prompt_message_tool(self, tool: dify_plugin.interfaces.agent.ToolEntity, prompt_tool: dify_plugin.entities.model.message.PromptMessageTool) -> dify_plugin.entities.model.message.PromptMessageTool
+     |      update prompt message tool
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke'})
+     |
+     |  __annotations__ = {}
+     |
+     |  __orig_bases__ = (dify_plugin.interfaces.tool.ToolLike[dify_plugin.ent...
+     |
+     |  __parameters__ = ()
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.tool.ToolLike:
+     |
+     |  create_blob_message(self, blob: bytes, meta: Optional[dict] = None) -> ~T
+     |      create a blob message
+     |
+     |      :param blob: the blob
+     |      :return: the blob message
+     |
+     |  create_image_message(self, image_url: str) -> ~T
+     |      create an image message
+     |
+     |      :param image: the url of the image
+     |      :return: the image message
+     |
+     |  create_json_message(self, json: dict) -> ~T
+     |
+     |  create_link_message(self, link: str) -> ~T
+     |      create a link message
+     |
+     |      :param link: the url of the link
+     |      :return: the link message
+     |
+     |  create_log_message(self, label: str, data: collections.abc.Mapping[str, typing.Any], status: dify_plugin.entities.tool.ToolInvokeMessage.LogMessage.LogStatus = <LogStatus.SUCCESS: 'success'>, parent: Optional[~T] = None, metadata: Optional[collections.abc.Mapping[str, Any]] = None) -> ~T
+     |      create a log message with status "start"
+     |
+     |  create_stream_variable_message(self, variable_name: str, variable_value: str) -> ~T
+     |      create a variable message that will be streamed to the frontend
+     |
+     |      NOTE: variable value should be a string, only string is streaming supported now
+     |
+     |      :param variable_name: the name of the variable
+     |      :param variable_value: the value of the variable
+     |      :return: the variable message
+     |
+     |  create_text_message(self, text: str) -> ~T
+     |
+     |  create_variable_message(self, variable_name: str, variable_value: Any) -> ~T
+     |      create a variable message
+     |
+     |      :param variable_name: the name of the variable
+     |      :param variable_value: the value of the variable
+     |      :return: the variable message
+     |
+     |  finish_log_message(self, log: ~T, status: dify_plugin.entities.tool.ToolInvokeMessage.LogMessage.LogStatus = <LogStatus.SUCCESS: 'success'>, error: Optional[str] = None, data: Optional[collections.abc.Mapping[str, Any]] = None, metadata: Optional[collections.abc.Mapping[str, Any]] = None) -> ~T
+     |      mark log as finished
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.tool.ToolLike:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from typing.Generic:
+     |
+     |  __class_getitem__(...)
+     |      Parameterizes a generic class.
+     |
+     |      At least, parameterizing a generic class is the *main* thing this
+     |      method does. For example, for some generic class `Foo`, this is called
+     |      when we do `Foo[int]` - there, with `cls=Foo` and `params=int`.
+     |
+     |      However, note that this method is also called when defining generic
+     |      classes in the first place with `class Foo[T]: ...`.
+     |
+     |  __init_subclass__(...)
+     |      Function to initialize subclasses.
+
+    class DifyPluginEnv(pydantic_settings.main.BaseSettings)
+     |  DifyPluginEnv(_case_sensitive: 'bool | None' = None, _env_prefix: 'str | None' = None, _env_file: 'DotenvType | None' = PosixPath('.'), _env_file_encoding: 'str | None' = None, _env_ignore_empty: 'bool | None' = None, _env_nested_delimiter: 'str | None' = None, _env_parse_none_str: 'str | None' = None, _env_parse_enums: 'bool | None' = None, _cli_prog_name: 'str | None' = None, _cli_parse_args: 'bool | list[str] | tuple[str, ...] | None' = None, _cli_settings_source: 'CliSettingsSource[Any] | None' = None, _cli_parse_none_str: 'str | None' = None, _cli_hide_none_type: 'bool | None' = None, _cli_avoid_json: 'bool | None' = None, _cli_enforce_required: 'bool | None' = None, _cli_use_class_docs_for_groups: 'bool | None' = None, _cli_prefix: 'str | None' = None, _secrets_dir: 'str | Path | None' = None, *, MAX_REQUEST_TIMEOUT: int = 300, MAX_WORKER: int = 1000, HEARTBEAT_INTERVAL: float = 10, INSTALL_METHOD: dify_plugin.config.config.InstallMethod = <InstallMethod.Local: 'local'>, REMOTE_INSTALL_HOST: str = 'localhost', REMOTE_INSTALL_PORT: int = 5003, REMOTE_INSTALL_KEY: Optional[str] = None, AWS_LAMBDA_PORT: int = 8080, DIFY_PLUGIN_DAEMON_URL: str = 'http://localhost:5002') -> None
+     |
+     |  Method resolution order:
+     |      DifyPluginEnv
+     |      pydantic_settings.main.BaseSettings
+     |      pydantic.main.BaseModel
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __hash__ = hash_func(self: 'Any') -> 'int' from pydantic._internal._model_construction.make_hash_func.<locals>
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {'AWS_LAMBDA_PORT': <class 'int'>, 'DIFY_PLUGIN_DAEM...
+     |
+     |  __class_vars__ = set()
+     |
+     |  __private_attributes__ = {}
+     |
+     |  __pydantic_complete__ = True
+     |
+     |  __pydantic_core_schema__ = {'cls': <class 'dify_plugin.config.config.D...
+     |
+     |  __pydantic_custom_init__ = True
+     |
+     |  __pydantic_decorators__ = DecoratorInfos(validators={}, field_validato...
+     |
+     |  __pydantic_generic_metadata__ = {'args': (), 'origin': None, 'paramete...
+     |
+     |  __pydantic_parent_namespace__ = {'BaseSettings': <pydantic._internal._...
+     |
+     |  __pydantic_post_init__ = None
+     |
+     |  __pydantic_serializer__ = SchemaSerializer(serializer=Model(
+     |      Model...
+     |
+     |  __pydantic_validator__ = SchemaValidator(title="DifyPluginEnv", valida...
+     |
+     |  __signature__ = <Signature (_case_sensitive: 'bool | None' = Non...EMO...
+     |
+     |  model_computed_fields = {}
+     |
+     |  model_config = {'arbitrary_types_allowed': True, 'case_sensitive': Fal...
+     |
+     |  model_fields = {'AWS_LAMBDA_PORT': FieldInfo(annotation=int, required=...
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from pydantic_settings.main.BaseSettings:
+     |
+     |  __init__(__pydantic_self__, _case_sensitive: 'bool | None' = None, _env_prefix: 'str | None' = None, _env_file: 'DotenvType | None' = PosixPath('.'), _env_file_encoding: 'str | None' = None, _env_ignore_empty: 'bool | None' = None, _env_nested_delimiter: 'str | None' = None, _env_parse_none_str: 'str | None' = None, _env_parse_enums: 'bool | None' = None, _cli_prog_name: 'str | None' = None, _cli_parse_args: 'bool | list[str] | tuple[str, ...] | None' = None, _cli_settings_source: 'CliSettingsSource[Any] | None' = None, _cli_parse_none_str: 'str | None' = None, _cli_hide_none_type: 'bool | None' = None, _cli_avoid_json: 'bool | None' = None, _cli_enforce_required: 'bool | None' = None, _cli_use_class_docs_for_groups: 'bool | None' = None, _cli_prefix: 'str | None' = None, _secrets_dir: 'str | Path | None' = None, **values: 'Any') -> 'None'
+     |      Create a new model by parsing and validating input data from keyword arguments.
+     |
+     |      Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+     |      validated to form a valid model.
+     |
+     |      `self` is explicitly positional-only to allow `self` as a field name.
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from pydantic_settings.main.BaseSettings:
+     |
+     |  settings_customise_sources(settings_cls: 'type[BaseSettings]', init_settings: 'PydanticBaseSettingsSource', env_settings: 'PydanticBaseSettingsSource', dotenv_settings: 'PydanticBaseSettingsSource', file_secret_settings: 'PydanticBaseSettingsSource') -> 'tuple[PydanticBaseSettingsSource, ...]'
+     |      Define the sources and their order for loading the settings values.
+     |
+     |      Args:
+     |          settings_cls: The Settings class.
+     |          init_settings: The `InitSettingsSource` instance.
+     |          env_settings: The `EnvSettingsSource` instance.
+     |          dotenv_settings: The `DotEnvSettingsSource` instance.
+     |          file_secret_settings: The `SecretsSettingsSource` instance.
+     |
+     |      Returns:
+     |          A tuple containing the sources and their order for loading the settings values.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from pydantic_settings.main.BaseSettings:
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from pydantic.main.BaseModel:
+     |
+     |  __copy__(self) -> 'Self'
+     |      Returns a shallow copy of the model.
+     |
+     |  __deepcopy__(self, memo: 'dict[int, Any] | None' = None) -> 'Self'
+     |      Returns a deep copy of the model.
+     |
+     |  __delattr__(self, item: 'str') -> 'Any'
+     |      Implement delattr(self, name).
+     |
+     |  __eq__(self, other: 'Any') -> 'bool'
+     |      Return self==value.
+     |
+     |  __getattr__(self, item: 'str') -> 'Any'
+     |
+     |  __getstate__(self) -> 'dict[Any, Any]'
+     |      Helper for pickle.
+     |
+     |  __iter__(self) -> 'TupleGenerator'
+     |      So `dict(model)` works.
+     |
+     |  __pretty__(self, fmt: 'typing.Callable[[Any], Any]', **kwargs: 'Any') -> 'typing.Generator[Any, None, None]' from pydantic._internal._repr.Representation
+     |      Used by devtools (https://python-devtools.helpmanual.io/) to pretty print objects.
+     |
+     |  __repr__(self) -> 'str'
+     |      Return repr(self).
+     |
+     |  __repr_args__(self) -> '_repr.ReprArgs'
+     |
+     |  __repr_name__(self) -> 'str' from pydantic._internal._repr.Representation
+     |      Name of the instance's class, used in __repr__.
+     |
+     |  __repr_str__(self, join_str: 'str') -> 'str' from pydantic._internal._repr.Representation
+     |
+     |  __rich_repr__(self) -> 'RichReprResult' from pydantic._internal._repr.Representation
+     |      Used by Rich (https://rich.readthedocs.io/en/stable/pretty.html) to pretty print objects.
+     |
+     |  __setattr__(self, name: 'str', value: 'Any') -> 'None'
+     |      Implement setattr(self, name, value).
+     |
+     |  __setstate__(self, state: 'dict[Any, Any]') -> 'None'
+     |
+     |  __str__(self) -> 'str'
+     |      Return str(self).
+     |
+     |  copy(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+     |      Returns a copy of the model.
+     |
+     |      !!! warning "Deprecated"
+     |          This method is now deprecated; use `model_copy` instead.
+     |
+     |      If you need `include` or `exclude`, use:
+     |
+     |      ```py
+     |      data = self.model_dump(include=include, exclude=exclude, round_trip=True)
+     |      data = {**data, **(update or {})}
+     |      copied = self.model_validate(data)
+     |      ```
+     |
+     |      Args:
+     |          include: Optional set or mapping specifying which fields to include in the copied model.
+     |          exclude: Optional set or mapping specifying which fields to exclude in the copied model.
+     |          update: Optional dictionary of field-value pairs to override field values in the copied model.
+     |          deep: If True, the values of fields that are Pydantic models will be deep-copied.
+     |
+     |      Returns:
+     |          A copy of the model with included, excluded and updated fields as specified.
+     |
+     |  dict(self, *, include: 'IncEx' = None, exclude: 'IncEx' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'
+     |
+     |  json(self, *, include: 'IncEx' = None, exclude: 'IncEx' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'
+     |
+     |  model_copy(self, *, update: 'dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+     |      Usage docs: https://docs.pydantic.dev/2.8/concepts/serialization/#model_copy
+     |
+     |      Returns a copy of the model.
+     |
+     |      Args:
+     |          update: Values to change/add in the new model. Note: the data is not validated
+     |              before creating the new model. You should trust this data.
+     |          deep: Set to `True` to make a deep copy of the model.
+     |
+     |      Returns:
+     |          New model instance.
+     |
+     |  model_dump(self, *, mode: "Literal['json', 'python'] | str" = 'python', include: 'IncEx' = None, exclude: 'IncEx' = None, context: 'Any | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, serialize_as_any: 'bool' = False) -> 'dict[str, Any]'
+     |      Usage docs: https://docs.pydantic.dev/2.8/concepts/serialization/#modelmodel_dump
+     |
+     |      Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.
+     |
+     |      Args:
+     |          mode: The mode in which `to_python` should run.
+     |              If mode is 'json', the output will only contain JSON serializable types.
+     |              If mode is 'python', the output may contain non-JSON-serializable Python objects.
+     |          include: A set of fields to include in the output.
+     |          exclude: A set of fields to exclude from the output.
+     |          context: Additional context to pass to the serializer.
+     |          by_alias: Whether to use the field's alias in the dictionary key if defined.
+     |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+     |          exclude_defaults: Whether to exclude fields that are set to their default value.
+     |          exclude_none: Whether to exclude fields that have a value of `None`.
+     |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+     |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+     |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+     |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+     |
+     |      Returns:
+     |          A dictionary representation of the model.
+     |
+     |  model_dump_json(self, *, indent: 'int | None' = None, include: 'IncEx' = None, exclude: 'IncEx' = None, context: 'Any | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, serialize_as_any: 'bool' = False) -> 'str'
+     |      Usage docs: https://docs.pydantic.dev/2.8/concepts/serialization/#modelmodel_dump_json
+     |
+     |      Generates a JSON representation of the model using Pydantic's `to_json` method.
+     |
+     |      Args:
+     |          indent: Indentation to use in the JSON output. If None is passed, the output will be compact.
+     |          include: Field(s) to include in the JSON output.
+     |          exclude: Field(s) to exclude from the JSON output.
+     |          context: Additional context to pass to the serializer.
+     |          by_alias: Whether to serialize using field aliases.
+     |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+     |          exclude_defaults: Whether to exclude fields that are set to their default value.
+     |          exclude_none: Whether to exclude fields that have a value of `None`.
+     |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+     |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+     |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+     |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+     |
+     |      Returns:
+     |          A JSON string representation of the model.
+     |
+     |  model_post_init(self, _BaseModel__context: 'Any') -> 'None'
+     |      Override this method to perform additional initialization after `__init__` and `model_construct`.
+     |      This is useful if you want to do some validation that requires the entire model to be initialized.
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from pydantic.main.BaseModel:
+     |
+     |  __class_getitem__(typevar_values: 'type[Any] | tuple[type[Any], ...]') -> 'type[BaseModel] | _forward_ref.PydanticRecursiveRef'
+     |
+     |  __get_pydantic_core_schema__(source: 'type[BaseModel]', handler: 'GetCoreSchemaHandler', /) -> 'CoreSchema'
+     |      Hook into generating the model's CoreSchema.
+     |
+     |      Args:
+     |          source: The class we are generating a schema for.
+     |              This will generally be the same as the `cls` argument if this is a classmethod.
+     |          handler: A callable that calls into Pydantic's internal CoreSchema generation logic.
+     |
+     |      Returns:
+     |          A `pydantic-core` `CoreSchema`.
+     |
+     |  __get_pydantic_json_schema__(core_schema: 'CoreSchema', handler: 'GetJsonSchemaHandler', /) -> 'JsonSchemaValue'
+     |      Hook into generating the model's JSON schema.
+     |
+     |      Args:
+     |          core_schema: A `pydantic-core` CoreSchema.
+     |              You can ignore this argument and call the handler with a new CoreSchema,
+     |              wrap this CoreSchema (`{'type': 'nullable', 'schema': current_schema}`),
+     |              or just call the handler with the original schema.
+     |          handler: Call into Pydantic's internal JSON schema generation.
+     |              This will raise a `pydantic.errors.PydanticInvalidForJsonSchema` if JSON schema
+     |              generation fails.
+     |              Since this gets called by `BaseModel.model_json_schema` you can override the
+     |              `schema_generator` argument to that function to change JSON schema generation globally
+     |              for a type.
+     |
+     |      Returns:
+     |          A JSON schema, as a Python object.
+     |
+     |  __pydantic_init_subclass__(**kwargs: 'Any') -> 'None'
+     |      This is intended to behave just like `__init_subclass__`, but is called by `ModelMetaclass`
+     |      only after the class is actually fully initialized. In particular, attributes like `model_fields` will
+     |      be present when this is called.
+     |
+     |      This is necessary because `__init_subclass__` will always be called by `type.__new__`,
+     |      and it would require a prohibitively large refactor to the `ModelMetaclass` to ensure that
+     |      `type.__new__` was called in such a manner that the class would already be sufficiently initialized.
+     |
+     |      This will receive the same `kwargs` that would be passed to the standard `__init_subclass__`, namely,
+     |      any kwargs passed to the class definition that aren't used internally by pydantic.
+     |
+     |      Args:
+     |          **kwargs: Any keyword arguments passed to the class definition that aren't used internally
+     |              by pydantic.
+     |
+     |  construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self'
+     |
+     |  from_orm(obj: 'Any') -> 'Self'
+     |
+     |  model_construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self'
+     |      Creates a new instance of the `Model` class with validated data.
+     |
+     |      Creates a new model setting `__dict__` and `__pydantic_fields_set__` from trusted or pre-validated data.
+     |      Default values are respected, but no other validation is performed.
+     |
+     |      !!! note
+     |          `model_construct()` generally respects the `model_config.extra` setting on the provided model.
+     |          That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__`
+     |          and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
+     |          Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in
+     |          an error if extra values are passed, but they will be ignored.
+     |
+     |      Args:
+     |          _fields_set: The set of field names accepted for the Model instance.
+     |          values: Trusted or pre-validated data dictionary.
+     |
+     |      Returns:
+     |          A new instance of the `Model` class with validated data.
+     |
+     |  model_json_schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', schema_generator: 'type[GenerateJsonSchema]' = <class 'pydantic.json_schema.GenerateJsonSchema'>, mode: 'JsonSchemaMode' = 'validation') -> 'dict[str, Any]'
+     |      Generates a JSON schema for a model class.
+     |
+     |      Args:
+     |          by_alias: Whether to use attribute aliases or not.
+     |          ref_template: The reference template.
+     |          schema_generator: To override the logic used to generate the JSON schema, as a subclass of
+     |              `GenerateJsonSchema` with your desired modifications
+     |          mode: The mode in which to generate the schema.
+     |
+     |      Returns:
+     |          The JSON schema for the given model class.
+     |
+     |  model_parametrized_name(params: 'tuple[type[Any], ...]') -> 'str'
+     |      Compute the class name for parametrizations of generic classes.
+     |
+     |      This method can be overridden to achieve a custom naming scheme for generic BaseModels.
+     |
+     |      Args:
+     |          params: Tuple of types of the class. Given a generic class
+     |              `Model` with 2 type variables and a concrete model `Model[str, int]`,
+     |              the value `(str, int)` would be passed to `params`.
+     |
+     |      Returns:
+     |          String representing the new class where `params` are passed to `cls` as type variables.
+     |
+     |      Raises:
+     |          TypeError: Raised when trying to generate concrete names for non-generic models.
+     |
+     |  model_rebuild(*, force: 'bool' = False, raise_errors: 'bool' = True, _parent_namespace_depth: 'int' = 2, _types_namespace: 'dict[str, Any] | None' = None) -> 'bool | None'
+     |      Try to rebuild the pydantic-core schema for the model.
+     |
+     |      This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
+     |      the initial attempt to build the schema, and automatic rebuilding fails.
+     |
+     |      Args:
+     |          force: Whether to force the rebuilding of the model schema, defaults to `False`.
+     |          raise_errors: Whether to raise errors, defaults to `True`.
+     |          _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
+     |          _types_namespace: The types namespace, defaults to `None`.
+     |
+     |      Returns:
+     |          Returns `None` if the schema is already "complete" and rebuilding was not required.
+     |          If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
+     |
+     |  model_validate(obj: 'Any', *, strict: 'bool | None' = None, from_attributes: 'bool | None' = None, context: 'Any | None' = None) -> 'Self'
+     |      Validate a pydantic model instance.
+     |
+     |      Args:
+     |          obj: The object to validate.
+     |          strict: Whether to enforce types strictly.
+     |          from_attributes: Whether to extract data from object attributes.
+     |          context: Additional context to pass to the validator.
+     |
+     |      Raises:
+     |          ValidationError: If the object could not be validated.
+     |
+     |      Returns:
+     |          The validated model instance.
+     |
+     |  model_validate_json(json_data: 'str | bytes | bytearray', *, strict: 'bool | None' = None, context: 'Any | None' = None) -> 'Self'
+     |      Usage docs: https://docs.pydantic.dev/2.8/concepts/json/#json-parsing
+     |
+     |      Validate the given JSON data against the Pydantic model.
+     |
+     |      Args:
+     |          json_data: The JSON data to validate.
+     |          strict: Whether to enforce types strictly.
+     |          context: Extra variables to pass to the validator.
+     |
+     |      Returns:
+     |          The validated Pydantic model.
+     |
+     |      Raises:
+     |          ValueError: If `json_data` is not a JSON string.
+     |
+     |  model_validate_strings(obj: 'Any', *, strict: 'bool | None' = None, context: 'Any | None' = None) -> 'Self'
+     |      Validate the given object with string data against the Pydantic model.
+     |
+     |      Args:
+     |          obj: The object containing string data to validate.
+     |          strict: Whether to enforce types strictly.
+     |          context: Extra variables to pass to the validator.
+     |
+     |      Returns:
+     |          The validated Pydantic model.
+     |
+     |  parse_file(path: 'str | Path', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self'
+     |
+     |  parse_obj(obj: 'Any') -> 'Self'
+     |
+     |  parse_raw(b: 'str | bytes', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self'
+     |
+     |  schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}') -> 'Dict[str, Any]'
+     |
+     |  schema_json(*, by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', **dumps_kwargs: 'Any') -> 'str'
+     |
+     |  update_forward_refs(**localns: 'Any') -> 'None'
+     |
+     |  validate(value: 'Any') -> 'Self'
+     |
+     |  ----------------------------------------------------------------------
+     |  Readonly properties inherited from pydantic.main.BaseModel:
+     |
+     |  __fields_set__
+     |
+     |  model_extra
+     |      Get extra fields set during validation.
+     |
+     |      Returns:
+     |          A dictionary of extra fields, or `None` if `config.extra` is not set to `"allow"`.
+     |
+     |  model_fields_set
+     |      Returns the set of fields that have been explicitly set on this model instance.
+     |
+     |      Returns:
+     |          A set of strings representing the fields that have been set,
+     |              i.e. that were not filled from defaults.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from pydantic.main.BaseModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __pydantic_extra__
+     |
+     |  __pydantic_fields_set__
+     |
+     |  __pydantic_private__
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from pydantic.main.BaseModel:
+     |
+     |  __pydantic_root_model__ = False
+
+    class Endpoint(abc.ABC)
+     |  Endpoint(session: dify_plugin.core.runtime.Session) -> None
+     |
+     |  Method resolution order:
+     |      Endpoint
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, session: dify_plugin.core.runtime.Session) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  invoke(self, r: werkzeug.wrappers.request.Request, values: collections.abc.Mapping, settings: collections.abc.Mapping) -> werkzeug.wrappers.response.Response
+     |      Invokes the endpoint with the given request.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke'})
+     |
+     |  __annotations__ = {}
+
+    class File(dify_plugin.core.runtime.BackwardsInvocation)
+     |  File(session: Optional[dify_plugin.core.runtime.Session] = None) -> None
+     |
+     |  Method resolution order:
+     |      File
+     |      dify_plugin.core.runtime.BackwardsInvocation
+     |      typing.Generic
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  upload(self, filename: str, content: bytes, mimetype: str) -> dify_plugin.invocations.file.UploadFileResponse
+     |      Upload a file
+     |
+     |      :param filename: file name
+     |      :param content: file content
+     |      :param mimetype: file mime type
+     |
+     |      :return: file id
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  __orig_bases__ = (dify_plugin.core.runtime.BackwardsInvocation[dict],)
+     |
+     |  __parameters__ = ()
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.core.runtime.BackwardsInvocation:
+     |
+     |  __init__(self, session: Optional[dify_plugin.core.runtime.Session] = None) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.core.runtime.BackwardsInvocation:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from typing.Generic:
+     |
+     |  __class_getitem__(...)
+     |      Parameterizes a generic class.
+     |
+     |      At least, parameterizing a generic class is the *main* thing this
+     |      method does. For example, for some generic class `Foo`, this is called
+     |      when we do `Foo[int]` - there, with `cls=Foo` and `params=int`.
+     |
+     |      However, note that this method is also called when defining generic
+     |      classes in the first place with `class Foo[T]: ...`.
+     |
+     |  __init_subclass__(...)
+     |      Function to initialize subclasses.
+
+    class LargeLanguageModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  LargeLanguageModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for large language model.
+     |
+     |  Method resolution order:
+     |      LargeLanguageModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  enforce_stop_tokens(self, text: str, stop: list[str]) -> str
+     |      Cut off the text as soon as any stop words occur.
+     |
+     |  get_model_mode(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> dify_plugin.entities.model.llm.LLMMode
+     |      Get model mode
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model mode
+     |
+     |  get_num_tokens(self, model: str, credentials: dict, prompt_messages: list[dify_plugin.entities.model.message.PromptMessage], tools: Optional[list[dify_plugin.entities.model.message.PromptMessageTool]] = None) -> int
+     |      Get number of tokens for given prompt messages
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param prompt_messages: prompt messages
+     |      :param tools: tools for tool calling
+     |      :return:
+     |
+     |  get_parameter_rules(self, model: str, credentials: dict) -> list[dify_plugin.entities.model.ParameterRule]
+     |      Get parameter rules
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: parameter rules
+     |
+     |  invoke(self, model: str, credentials: dict, prompt_messages: list[dify_plugin.entities.model.message.PromptMessage], model_parameters: Optional[dict] = None, tools: Optional[list[dify_plugin.entities.model.message.PromptMessageTool]] = None, stop: Optional[list[str]] = None, stream: bool = True, user: Optional[str] = None) -> collections.abc.Generator[dify_plugin.entities.model.llm.LLMResultChunk, None, None]
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param prompt_messages: prompt messages
+     |      :param model_parameters: model parameters
+     |      :param tools: tools for tool calling
+     |      :param stop: stop words
+     |      :param stream: is stream response
+     |      :param user: unique user id
+     |      :param callbacks: callbacks
+     |      :return: full response or stream response chunk generator result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.LLM: 'llm'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class ModelProvider(abc.ABC)
+     |  ModelProvider(provider_schemas: dify_plugin.entities.model.provider.ProviderEntity, model_instance_map: dict[dify_plugin.entities.model.ModelType, dify_plugin.interfaces.model.ai_model.AIModel])
+     |
+     |  Method resolution order:
+     |      ModelProvider
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, provider_schemas: dify_plugin.entities.model.provider.ProviderEntity, model_instance_map: dict[dify_plugin.entities.model.ModelType, dify_plugin.interfaces.model.ai_model.AIModel])
+     |      Initialize model provider
+     |
+     |      :param provider_schemas: provider schemas
+     |      :param model_instance_map: model instance map
+     |
+     |  get_model_instance(self, model_type: dify_plugin.entities.model.ModelType) -> dify_plugin.interfaces.model.ai_model.AIModel
+     |      Get model instance
+     |
+     |      :param model_type: model type defined in `ModelType`
+     |      :return:
+     |
+     |  get_provider_schema(self) -> dify_plugin.entities.model.provider.ProviderEntity
+     |      Get provider schema
+     |
+     |      :return: provider schema
+     |
+     |  models(self, model_type: dify_plugin.entities.model.ModelType) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all models for given model type
+     |
+     |      :param model_type: model type defined in `ModelType`
+     |      :return: list of models
+     |
+     |  validate_provider_credentials(self, credentials: dict) -> None
+     |      Validate provider credentials
+     |      You can choose any validate_credentials method of model type or implement validate method by yourself,
+     |      such as: get model list api
+     |
+     |      if validate failed, raise exception
+     |
+     |      :param credentials: provider credentials, credentials form defined in `provider_credential_schema`.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'validate_provider_credentials'})
+     |
+     |  __annotations__ = {'model_instance_map': dict[dify_plugin.entities.mod...
+
+    class ModerationModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  ModerationModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for moderation model.
+     |
+     |  Method resolution order:
+     |      ModerationModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  invoke(self, model: str, credentials: dict, text: str, user: Optional[str] = None) -> bool
+     |      Invoke moderation model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param text: text to moderate
+     |      :param user: unique user id
+     |      :return: false if text is safe, true otherwise
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.MODERATION: 'moderation'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class OAICompatEmbeddingModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel)
+     |  OAICompatEmbeddingModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for an OpenAI API-compatible text embedding model.
+     |
+     |  Method resolution order:
+     |      OAICompatEmbeddingModel
+     |      dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat
+     |      dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: dict) -> dify_plugin.entities.model.AIModelEntity
+     |      generate custom model entities from credentials
+     |
+     |  get_num_tokens(self, model: str, credentials: dict, texts: list[str]) -> list[int]
+     |      Approximate number of tokens for given messages using GPT2 tokenizer
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param texts: texts to embed
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: dict) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel:
+     |
+     |  invoke(self, model: str, credentials: dict, texts: list[str], user: Optional[str] = None, input_type: dify_plugin.entities.model.EmbeddingInputType = <EmbeddingInputType.DOCUMENT: 'document'>) -> dify_plugin.entities.model.text_embedding.TextEmbeddingResult
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param texts: texts to embed
+     |      :param user: unique user id
+     |      :param input_type: embedding input type
+     |      :return: embeddings result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.text_embedding_model.TextEmbeddingModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.TEXT_EMBEDDING: 'text-embedding'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class OAICompatLargeLanguageModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.large_language_model.LargeLanguageModel)
+     |  OAICompatLargeLanguageModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for OpenAI large language model.
+     |
+     |  Method resolution order:
+     |      OAICompatLargeLanguageModel
+     |      dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat
+     |      dify_plugin.interfaces.model.large_language_model.LargeLanguageModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: dict) -> dify_plugin.entities.model.AIModelEntity
+     |      generate custom model entities from credentials
+     |
+     |  get_num_tokens(self, model: str, credentials: dict, prompt_messages: list[dify_plugin.entities.model.message.PromptMessage], tools: Optional[list[dify_plugin.entities.model.message.PromptMessageTool]] = None) -> int
+     |      Get number of tokens for given prompt messages
+     |
+     |      :param model:
+     |      :param credentials:
+     |      :param prompt_messages:
+     |      :param tools: tools for tool calling
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: dict) -> None
+     |      Validate model credentials using requests to ensure compatibility with all providers following
+     |       OpenAI's API standard.
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.large_language_model.LargeLanguageModel:
+     |
+     |  enforce_stop_tokens(self, text: str, stop: list[str]) -> str
+     |      Cut off the text as soon as any stop words occur.
+     |
+     |  get_model_mode(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> dify_plugin.entities.model.llm.LLMMode
+     |      Get model mode
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model mode
+     |
+     |  get_parameter_rules(self, model: str, credentials: dict) -> list[dify_plugin.entities.model.ParameterRule]
+     |      Get parameter rules
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: parameter rules
+     |
+     |  invoke(self, model: str, credentials: dict, prompt_messages: list[dify_plugin.entities.model.message.PromptMessage], model_parameters: Optional[dict] = None, tools: Optional[list[dify_plugin.entities.model.message.PromptMessageTool]] = None, stop: Optional[list[str]] = None, stream: bool = True, user: Optional[str] = None) -> collections.abc.Generator[dify_plugin.entities.model.llm.LLMResultChunk, None, None]
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param prompt_messages: prompt messages
+     |      :param model_parameters: model parameters
+     |      :param tools: tools for tool calling
+     |      :param stop: stop words
+     |      :param stream: is stream response
+     |      :param user: unique user id
+     |      :param callbacks: callbacks
+     |      :return: full response or stream response chunk generator result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.large_language_model.LargeLanguageModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.LLM: 'llm'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class OAICompatProvider(dify_plugin.interfaces.model.ModelProvider)
+     |  OAICompatProvider(provider_schemas: dify_plugin.entities.model.provider.ProviderEntity, model_instance_map: dict[dify_plugin.entities.model.ModelType, dify_plugin.interfaces.model.ai_model.AIModel])
+     |
+     |  Method resolution order:
+     |      OAICompatProvider
+     |      dify_plugin.interfaces.model.ModelProvider
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  validate_provider_credentials(self, credentials: dict) -> None
+     |      Validate provider credentials
+     |      You can choose any validate_credentials method of model type or implement validate method by yourself,
+     |      such as: get model list api
+     |
+     |      if validate failed, raise exception
+     |
+     |      :param credentials: provider credentials, credentials form defined in `provider_credential_schema`.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ModelProvider:
+     |
+     |  __init__(self, provider_schemas: dify_plugin.entities.model.provider.ProviderEntity, model_instance_map: dict[dify_plugin.entities.model.ModelType, dify_plugin.interfaces.model.ai_model.AIModel])
+     |      Initialize model provider
+     |
+     |      :param provider_schemas: provider schemas
+     |      :param model_instance_map: model instance map
+     |
+     |  get_model_instance(self, model_type: dify_plugin.entities.model.ModelType) -> dify_plugin.interfaces.model.ai_model.AIModel
+     |      Get model instance
+     |
+     |      :param model_type: model type defined in `ModelType`
+     |      :return:
+     |
+     |  get_provider_schema(self) -> dify_plugin.entities.model.provider.ProviderEntity
+     |      Get provider schema
+     |
+     |      :return: provider schema
+     |
+     |  models(self, model_type: dify_plugin.entities.model.ModelType) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all models for given model type
+     |
+     |      :param model_type: model type defined in `ModelType`
+     |      :return: list of models
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ModelProvider:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+
+    class OAICompatRerankModel(dify_plugin.interfaces.model.rerank_model.RerankModel)
+     |  OAICompatRerankModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  rerank model API is compatible with Jina rerank model API. So copy the JinaRerankModel class code here.
+     |  we need enhance for llama.cpp , which return raw score, not normalize score 0~1.  It seems Dify need it
+     |
+     |  Method resolution order:
+     |      OAICompatRerankModel
+     |      dify_plugin.interfaces.model.rerank_model.RerankModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: dict) -> dify_plugin.entities.model.AIModelEntity
+     |      generate custom model entities from credentials
+     |
+     |  validate_credentials(self, model: str, credentials: dict) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.rerank_model.RerankModel:
+     |
+     |  invoke(self, model: str, credentials: dict, query: str, docs: list[str], score_threshold: Optional[float] = None, top_n: Optional[int] = None, user: Optional[str] = None) -> dify_plugin.entities.model.rerank.RerankResult
+     |      Invoke rerank model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param query: search query
+     |      :param docs: docs for reranking
+     |      :param score_threshold: score threshold
+     |      :param top_n: top n
+     |      :param user: unique user id
+     |      :return: rerank result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.rerank_model.RerankModel:
+     |
+     |  model_type = <ModelType.RERANK: 'rerank'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  started_at = 0
+
+    class OAICompatSpeech2TextModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.speech2text_model.Speech2TextModel)
+     |  OAICompatSpeech2TextModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for OpenAI Compatible Speech to text model.
+     |
+     |  Method resolution order:
+     |      OAICompatSpeech2TextModel
+     |      dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat
+     |      dify_plugin.interfaces.model.speech2text_model.Speech2TextModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  validate_credentials(self, model: str, credentials: dict) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.speech2text_model.Speech2TextModel:
+     |
+     |  invoke(self, model: str, credentials: dict, file: IO[bytes], user: Optional[str] = None) -> str
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param file: audio file
+     |      :param user: unique user id
+     |      :return: text for given audio file
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.speech2text_model.Speech2TextModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.SPEECH2TEXT: 'speech2text'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class OAICompatText2SpeechModel(dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat, dify_plugin.interfaces.model.tts_model.TTSModel)
+     |  OAICompatText2SpeechModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for OpenAI-compatible text2speech model.
+     |
+     |  Method resolution order:
+     |      OAICompatText2SpeechModel
+     |      dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat
+     |      dify_plugin.interfaces.model.tts_model.TTSModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: dict) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |  get_tts_model_voices(self, model: str, credentials: dict, language: Optional[str] = None) -> list
+     |      Override base get_tts_model_voices to handle customizable voices
+     |
+     |  validate_credentials(self, model: str, credentials: dict) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.openai_compatible.common._CommonOaiApiCompat:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.tts_model.TTSModel:
+     |
+     |  invoke(self, model: str, tenant_id: str, credentials: dict, content_text: str, voice: str, user: Optional[str] = None) -> bytes | collections.abc.Generator[bytes, None, None]
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param tenant_id: user tenant id
+     |      :param credentials: model credentials
+     |      :param voice: model timbre
+     |      :param content_text: text content to be translated
+     |      :param streaming: output is streaming
+     |      :param user: unique user id
+     |      :return: translated audio file
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.tts_model.TTSModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.TTS: 'tts'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class Plugin(dify_plugin.core.server.io_server.IOServer, dify_plugin.core.server.router.Router)
+     |  Plugin(config: dify_plugin.config.config.DifyPluginEnv) -> None
+     |
+     |  Method resolution order:
+     |      Plugin
+     |      dify_plugin.core.server.io_server.IOServer
+     |      abc.ABC
+     |      dify_plugin.core.server.router.Router
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, config: dify_plugin.config.config.DifyPluginEnv) -> None
+     |      Initialize plugin
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset()
+     |
+     |  __annotations__ = {}
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.core.server.io_server.IOServer:
+     |
+     |  close(self, *args)
+     |
+     |  run(self)
+     |      start plugin server
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.core.server.io_server.IOServer:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.core.server.router.Router:
+     |
+     |  dispatch(self, session: dify_plugin.core.runtime.Session, data: dict) -> Any
+     |
+     |  register_route(self, f: collections.abc.Callable, filter: collections.abc.Callable[[dict], bool], instance: Any = None)
+
+    class RerankModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  RerankModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Base Model class for rerank model.
+     |
+     |  Method resolution order:
+     |      RerankModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  invoke(self, model: str, credentials: dict, query: str, docs: list[str], score_threshold: Optional[float] = None, top_n: Optional[int] = None, user: Optional[str] = None) -> dify_plugin.entities.model.rerank.RerankResult
+     |      Invoke rerank model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param query: search query
+     |      :param docs: docs for reranking
+     |      :param score_threshold: score threshold
+     |      :param top_n: top n
+     |      :param user: unique user id
+     |      :return: rerank result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_type = <ModelType.RERANK: 'rerank'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  started_at = 0
+
+    class Speech2TextModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  Speech2TextModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for speech2text model.
+     |
+     |  Method resolution order:
+     |      Speech2TextModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  invoke(self, model: str, credentials: dict, file: IO[bytes], user: Optional[str] = None) -> str
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param file: audio file
+     |      :param user: unique user id
+     |      :return: text for given audio file
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.SPEECH2TEXT: 'speech2text'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class TTSModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  TTSModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for ttstext model.
+     |
+     |  Method resolution order:
+     |      TTSModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_tts_model_voices(self, model: str, credentials: dict, language: Optional[str] = None) -> Optional[list]
+     |      Get voice for given tts model voices
+     |
+     |      :param language: tts language
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: voices lists
+     |
+     |  invoke(self, model: str, tenant_id: str, credentials: dict, content_text: str, voice: str, user: Optional[str] = None) -> bytes | collections.abc.Generator[bytes, None, None]
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param tenant_id: user tenant id
+     |      :param credentials: model credentials
+     |      :param voice: model timbre
+     |      :param content_text: text content to be translated
+     |      :param streaming: output is streaming
+     |      :param user: unique user id
+     |      :return: translated audio file
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.TTS: 'tts'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class TextEmbeddingModel(dify_plugin.interfaces.model.ai_model.AIModel)
+     |  TextEmbeddingModel(model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |
+     |  Model class for text embedding model.
+     |
+     |  Method resolution order:
+     |      TextEmbeddingModel
+     |      dify_plugin.interfaces.model.ai_model.AIModel
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  get_num_tokens(self, model: str, credentials: dict, texts: list[str]) -> list[int]
+     |      Get number of tokens for given prompt messages
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param texts: texts to embed
+     |      :return:
+     |
+     |  invoke(self, model: str, credentials: dict, texts: list[str], user: Optional[str] = None, input_type: dify_plugin.entities.model.EmbeddingInputType = <EmbeddingInputType.DOCUMENT: 'document'>) -> dify_plugin.entities.model.text_embedding.TextEmbeddingResult
+     |      Invoke large language model
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param texts: texts to embed
+     |      :param user: unique user id
+     |      :param input_type: embedding input type
+     |      :return: embeddings result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke', '_invoke_error_mapping', '...
+     |
+     |  __annotations__ = {'model_type': <enum 'ModelType'>}
+     |
+     |  model_config = {'protected_namespaces': ()}
+     |
+     |  model_type = <ModelType.TEXT_EMBEDDING: 'text-embedding'>
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __init__(self, model_schemas: list[dify_plugin.entities.model.AIModelEntity]) -> None
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_customizable_model_schema(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_customizable_model_schema_from_credentials(self, model: str, credentials: collections.abc.Mapping) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get customizable model schema from credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_model_schema(self, model: str, credentials: Optional[collections.abc.Mapping] = None) -> Optional[dify_plugin.entities.model.AIModelEntity]
+     |      Get model schema by model name and credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return: model schema
+     |
+     |  get_price(self, model: str, credentials: dict, price_type: dify_plugin.entities.model.PriceType, tokens: int) -> dify_plugin.entities.model.PriceInfo
+     |      Get price for given model and tokens
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :param price_type: price type
+     |      :param tokens: number of tokens
+     |      :return: price info
+     |
+     |  predefined_models(self) -> list[dify_plugin.entities.model.AIModelEntity]
+     |      Get all predefined models for given provider.
+     |
+     |      :return:
+     |
+     |  validate_credentials(self, model: str, credentials: collections.abc.Mapping) -> None
+     |      Validate model credentials
+     |
+     |      :param model: model name
+     |      :param credentials: model credentials
+     |      :return:
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from dify_plugin.interfaces.model.ai_model.AIModel:
+     |
+     |  started_at = 0
+
+    class Tool(ToolLike)
+     |  Tool(runtime: dify_plugin.entities.tool.ToolRuntime, session: dify_plugin.core.runtime.Session)
+     |
+     |  Method resolution order:
+     |      Tool
+     |      ToolLike
+     |      abc.ABC
+     |      typing.Generic
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, runtime: dify_plugin.entities.tool.ToolRuntime, session: dify_plugin.core.runtime.Session)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  get_runtime_parameters(self) -> list[dify_plugin.entities.tool.ToolParameter]
+     |
+     |  invoke(self, tool_parameters: dict) -> collections.abc.Generator[dify_plugin.entities.tool.ToolInvokeMessage, None, None]
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  from_credentials(credentials: dict, user_id: Optional[str] = None)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_invoke'})
+     |
+     |  __annotations__ = {'runtime': <class 'dify_plugin.entities.tool.ToolRu...
+     |
+     |  __orig_bases__ = (dify_plugin.interfaces.tool.ToolLike[dify_plugin.ent...
+     |
+     |  __parameters__ = ()
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ToolLike:
+     |
+     |  create_blob_message(self, blob: bytes, meta: Optional[dict] = None) -> ~T
+     |      create a blob message
+     |
+     |      :param blob: the blob
+     |      :return: the blob message
+     |
+     |  create_image_message(self, image_url: str) -> ~T
+     |      create an image message
+     |
+     |      :param image: the url of the image
+     |      :return: the image message
+     |
+     |  create_json_message(self, json: dict) -> ~T
+     |
+     |  create_link_message(self, link: str) -> ~T
+     |      create a link message
+     |
+     |      :param link: the url of the link
+     |      :return: the link message
+     |
+     |  create_log_message(self, label: str, data: collections.abc.Mapping[str, typing.Any], status: dify_plugin.entities.tool.ToolInvokeMessage.LogMessage.LogStatus = <LogStatus.SUCCESS: 'success'>, parent: Optional[~T] = None, metadata: Optional[collections.abc.Mapping[str, Any]] = None) -> ~T
+     |      create a log message with status "start"
+     |
+     |  create_stream_variable_message(self, variable_name: str, variable_value: str) -> ~T
+     |      create a variable message that will be streamed to the frontend
+     |
+     |      NOTE: variable value should be a string, only string is streaming supported now
+     |
+     |      :param variable_name: the name of the variable
+     |      :param variable_value: the value of the variable
+     |      :return: the variable message
+     |
+     |  create_text_message(self, text: str) -> ~T
+     |
+     |  create_variable_message(self, variable_name: str, variable_value: Any) -> ~T
+     |      create a variable message
+     |
+     |      :param variable_name: the name of the variable
+     |      :param variable_value: the value of the variable
+     |      :return: the variable message
+     |
+     |  finish_log_message(self, log: ~T, status: dify_plugin.entities.tool.ToolInvokeMessage.LogMessage.LogStatus = <LogStatus.SUCCESS: 'success'>, error: Optional[str] = None, data: Optional[collections.abc.Mapping[str, Any]] = None, metadata: Optional[collections.abc.Mapping[str, Any]] = None) -> ~T
+     |      mark log as finished
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ToolLike:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from typing.Generic:
+     |
+     |  __class_getitem__(...)
+     |      Parameterizes a generic class.
+     |
+     |      At least, parameterizing a generic class is the *main* thing this
+     |      method does. For example, for some generic class `Foo`, this is called
+     |      when we do `Foo[int]` - there, with `cls=Foo` and `params=int`.
+     |
+     |      However, note that this method is also called when defining generic
+     |      classes in the first place with `class Foo[T]: ...`.
+     |
+     |  __init_subclass__(...)
+     |      Function to initialize subclasses.
+
+    class ToolProvider(abc.ABC)
+     |  Method resolution order:
+     |      ToolProvider
+     |      abc.ABC
+     |      builtins.object
+     |
+     |  Methods defined here:
+     |
+     |  validate_credentials(self, credentials: dict)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __abstractmethods__ = frozenset({'_validate_credentials'})
+     |
+     |  __annotations__ = {}
+
+DATA
+    __all__ = ['Plugin', 'DifyPluginEnv', 'Endpoint', 'ToolProvider', 'Too...
+
+FILE
+    /home/ubuntu/repos/cosense-dify-plugin/.venv/lib/python3.12/site-packages/dify_plugin/__init__.py
+
+
+
+Submodules:
+- config
+  Classes:
+- core
+  Classes:
+- entities
+  Classes:
+    - I18nObject
+- errors
+  Classes:
+- file
+  Classes:
+- interfaces
+  Classes:
+- invocations
+  Classes:
+- plugin
+  Classes:
+    - AWSLambdaRequestReader
+    - AgentActions
+    - DifyPluginEnv
+    - EndpointActions
+    - IOServer
+    - InitializeMessage
+    - InstallMethod
+    - ModelActions
+    - Plugin
+    - PluginExecutor
+    - PluginInvokeType
+    - PluginRegistration
+    - RequestReader
+    - ResponseWriter
+    - Router
+    - Session
+    - StdioRequestReader
+    - StdioResponseWriter
+    - TCPReaderWriter
+    - ToolActions
+    - ToolInvokeMessage
+- tool
+  Classes:
+=== Arxiv Plugin Structure ===
+\n=== /home/ubuntu/dify-official-plugins/tools/arxiv/provider/arxiv.py ===
+from dify_plugin import ToolProvider
+from dify_plugin.errors.tool import ToolProviderCredentialValidationError
+from tools.arxiv_search import ArxivSearchTool
+
+
+class ArxivProvider(ToolProvider):
+    def validate_credentials(self, credentials: dict) -> None:
+        try:
+            for _ in ArxivSearchTool.from_credentials(credentials).invoke_from_executor(
+                tool_parameters={"query": "test", "result_type": "link"},
+            ):
+                pass
+        except Exception as e:
+            raise ToolProviderCredentialValidationError(str(e))
+\n=== /home/ubuntu/dify-official-plugins/tools/arxiv/main.py ===
+from dify_plugin import Plugin, DifyPluginEnv
+
+plugin = Plugin(DifyPluginEnv(MAX_REQUEST_TIMEOUT=30))
+
+if __name__ == "__main__":
+    plugin.run()
+\n=== /home/ubuntu/dify-official-plugins/tools/arxiv/tools/arxiv_search.py ===
+import logging
+from typing import Any, Optional
+
+import arxiv
+from pydantic import BaseModel, Field
+
+from dify_plugin import Tool
+from dify_plugin.entities.tool import ToolInvokeMessage
+from collections.abc import Generator
+
+logger = logging.getLogger(__name__)
+
+
+class ArxivAPIWrapper(BaseModel):
+    """Wrapper around ArxivAPI.
+
+    To use, you should have the ``arxiv`` python package installed.
+    https://lukasschwab.me/arxiv.py/index.html
+    This wrapper will use the Arxiv API to conduct searches and
+    fetch document summaries. By default, it will return the document summaries
+    of the top-k results.
+    It limits the Document content by doc_content_chars_max.
+    Set doc_content_chars_max=None if you don't want to limit the content size.
+
+    Args:
+        top_k_results: number of the top-scored document used for the arxiv tool
+        ARXIV_MAX_QUERY_LENGTH: the cut limit on the query used for the arxiv tool.
+        load_max_docs: a limit to the number of loaded documents
+        load_all_available_meta:
+            if True: the `metadata` of the loaded Documents contains all available
+            meta info (see https://lukasschwab.me/arxiv.py/index.html#Result),
+            if False: the `metadata` contains only the published date, title,
+            authors and summary.
+        doc_content_chars_max: an optional cut limit for the length of a document's
+            content
+
+    Example:
+        .. code-block:: python
+
+            arxiv = ArxivAPIWrapper(
+                top_k_results = 3,
+                ARXIV_MAX_QUERY_LENGTH = 300,
+                load_max_docs = 3,
+                load_all_available_meta = False,
+                doc_content_chars_max = 40000
+            )
+            arxiv.run("tree of thought llm)
+    """
+
+    arxiv_search: type[arxiv.Search] = arxiv.Search  #: :meta private:
+    arxiv_http_error: tuple[type[Exception]] = (
+        arxiv.ArxivError,
+        arxiv.UnexpectedEmptyPageError,
+        arxiv.HTTPError,
+    )
+    top_k_results: int = 3
+    ARXIV_MAX_QUERY_LENGTH: int = 300
+    load_max_docs: int = 100
+    load_all_available_meta: bool = False
+    doc_content_chars_max: Optional[int] = 4000
+
+    def run(self, query: str) -> str:
+        """
+        Performs an arxiv search and A single string
+        with the publish date, title, authors, and summary
+        for each article separated by two newlines.
+
+        If an error occurs or no documents found, error text
+        is returned instead. Wrapper for
+        https://lukasschwab.me/arxiv.py/index.html#Search
+
+        Args:
+            query: a plaintext search query
+        """
+        try:
+            results = self.arxiv_search(  # type: ignore
+                query[: self.ARXIV_MAX_QUERY_LENGTH], max_results=self.top_k_results
+            ).results()
+        except self.arxiv_http_error as ex:
+            return f"Arxiv exception: {ex}"
+        docs = [
+            f"Published: {result.updated.date()}\n"
+            f"Title: {result.title}\n"
+            f"Authors: {', '.join(a.name for a in result.authors)}\n"
+            f"Summary: {result.summary}"
+            for result in results
+        ]
+        if docs:
+            return "\n\n".join(docs)[: self.doc_content_chars_max]
+        else:
+            return "No good Arxiv Result was found"
+
+
+class ArxivSearchInput(BaseModel):
+    query: str = Field(..., description="Search query.")
+
+
+class ArxivSearchTool(Tool):
+    """
+    A tool for searching articles on Arxiv.
+    """
+
+    def _invoke(
+        self, tool_parameters: dict[str, Any]
+    ) -> Generator[ToolInvokeMessage, None, None]:
+        """
+        Invokes the Arxiv search tool with the given user ID and tool parameters.
+
+        Args:
+            tool_parameters (dict[str, Any]): The parameters for the tool, including the 'query' parameter.
+
+        Returns:
+            Generator[ToolInvokeMessage, None, None]: The result of the tool invocation,
+             which can be a single message or a list of messages.
+        """
+        query = tool_parameters.get("query", "")
+
+        if not query:
+            yield self.create_text_message("Please input query")
+            return
+
+        arxiv = ArxivAPIWrapper()
+
+        response = arxiv.run(query)
+
+        yield self.create_text_message(self.session.model.summary.invoke(response, ""))

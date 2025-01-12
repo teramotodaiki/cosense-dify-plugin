@@ -4,7 +4,7 @@ from typing import Optional
 
 from cosense_search import cosense_search, CosenseSearchError
 
-def test_search_basic_functionality():
+def test_search_basic_functionality() -> bool:
     """Test basic search functionality with environment credentials"""
     try:
         # Test with public project
@@ -29,7 +29,7 @@ def test_search_basic_functionality():
         print(f"\nUnexpected error: {e}")
         return False
 
-def test_search_parameter_validation():
+def test_search_parameter_validation() -> bool:
     """Test parameter validation"""
     print("\n=== Parameter Validation Test ===")
     
@@ -51,7 +51,7 @@ def test_search_parameter_validation():
         
     return True
 
-def main():
+def main() -> None:
     """Run all tests"""
     print("\nRunning Cosense Search Tests...")
     print("Using environment credentials for authentication")
