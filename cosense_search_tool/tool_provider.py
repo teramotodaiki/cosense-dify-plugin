@@ -1,7 +1,8 @@
 from typing import Any, Dict, List, Optional
 
-from dify_plugin import ToolProvider, I18nObject
-from dify_plugin.entities.tool import ToolInvokeMessage
+from dify_plugin import ToolProvider
+from dify_plugin.tool import ToolInvokeMessage
+from dify_plugin.i18n import I18nObject
 
 from .cosense_search import cosense_search, CosenseSearchError
 
